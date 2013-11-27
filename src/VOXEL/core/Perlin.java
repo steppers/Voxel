@@ -7,7 +7,7 @@ public class Perlin {
 
     private long seed;
     private Random rand;
-    private int octave0 = 4;
+    private int octave0 = 1;
     private float persistence = 0.2f;
 
     public Perlin(long seed) {
@@ -36,14 +36,14 @@ public class Perlin {
 
     public float SmoothNoise3D(float x, float y, float z) {
         float corners = (Noise3D(x - 1, y - 1, z - 1) + Noise3D(x + 1, y - 1, z - 1) + Noise3D(x - 1, y + 1, z - 1) + Noise3D(x + 1, y + 1, z - 1)
-                + Noise3D(x - 1, y - 1, z + 1) + Noise3D(x + 1, y - 1, z + 1) + Noise3D(x - 1, y + 1, z + 1) + Noise3D(x + 1, y + 1, z + 1)) / 32;
+                + Noise3D(x - 1, y - 1, z + 1) + Noise3D(x + 1, y - 1, z + 1) + Noise3D(x - 1, y + 1, z + 1) + Noise3D(x + 1, y + 1, z + 1))/8;
         float sides = (Noise3D(x - 1, y, z) + Noise3D(x + 1, y, z) + Noise3D(x, y - 1, z) + Noise3D(x, y + 1, z)
-                + Noise3D(x, y, z - 1) + Noise3D(x, y, z + 1)) / 12;
+                + Noise3D(x, y, z - 1) + Noise3D(x, y, z + 1))/6;
         float planes = (Noise3D(x - 1, y - 1, z) + Noise3D(x + 1, y - 1, z) + Noise3D(x - 1, y + 1, z) + Noise3D(x + 1, y + 1, z)
                 + Noise3D(x - 1, y, z - 1) + Noise3D(x + 1, y, z - 1) + Noise3D(x - 1, y, z + 1) + Noise3D(x + 1, y, z + 1)
-                + Noise3D(x, y - 1, z - 1) + Noise3D(x, y + 1, z - 1) + Noise3D(x, y - 1, z + 1) + Noise3D(x, y + 1, z + 1)) / 48;
-        float center = Noise3D(x, y, z) / 4;
-        return corners + sides + planes + center;
+                + Noise3D(x, y - 1, z - 1) + Noise3D(x, y + 1, z - 1) + Noise3D(x, y - 1, z + 1) + Noise3D(x, y + 1, z + 1)) / 12;
+        float center = Noise3D(x, y, z);
+        return ((corners/2) + sides + (planes/1.5f) + center)/4;
     }
 
     public float InterpolatedNoise2D(float x, float y) {
@@ -58,10 +58,7 @@ public class Perlin {
         float v3 = SmoothNoise2D(iX, iY + 1);
         float v4 = SmoothNoise2D(iX + 1, iY + 1);
 
-        float i1 = CosineInterpolate(v1, v2, fX);
-        float i2 = CosineInterpolate(v3, v4, fX);
-
-        return CosineInterpolate(i1, i2, fY);
+        return biLerp(fX, fY, v1, v3, v2, v4, 0, 1, 0, 1);
     }
 
     public float InterpolatedNoise3D(float x, float y, float z) {
@@ -86,15 +83,7 @@ public class Perlin {
         float v7 = SmoothNoise3D(iX, iY + 1, iZ + 1);
         float v8 = SmoothNoise3D(iX + 1, iY + 1, iZ + 1);
 
-        float i1 = CosineInterpolate(v1, v2, fX);
-        float i2 = CosineInterpolate(v3, v4, fX);
-        float i3 = CosineInterpolate(v5, v6, fX);
-        float i4 = CosineInterpolate(v7, v8, fX);
-
-        float i5 = CosineInterpolate(i1, i3, fZ);
-        float i6 = CosineInterpolate(i2, i4, fZ);
-
-        return CosineInterpolate(i5, i6, fY);
+        return triLerp(fX, fY, fZ, v1, v5, v3, v7, v2, v6, v4, v8, 0, 1, 0, 1, 0, 1);
     }
 
     public float PerlinNoise_2D(float x, float y) {
