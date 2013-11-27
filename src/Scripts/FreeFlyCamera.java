@@ -10,7 +10,7 @@ import engine.math.Vector3f;
 
 public class FreeFlyCamera extends Component
 {
-    private static final float MOUSE_SENSITIVITY = 0.2f;
+    private static final float MOUSE_SENSITIVITY = 0.18f;
     private static final float MOVE_SPEED = 14f;
     
     private boolean mouseLocked = false;

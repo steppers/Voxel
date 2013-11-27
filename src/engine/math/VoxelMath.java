@@ -18,8 +18,8 @@ public class VoxelMath {
         float x10 = lerp(x, x1, x2, q010, q110);
         float x01 = lerp(x, x1, x2, q001, q101);
         float x11 = lerp(x, x1, x2, q011, q111);
-        float r0 = lerp(y, y1, y2, x00, x01);
-        float r1 = lerp(y, y1, y2, x10, x11);
+        float r0 = lerp(y, y1, y2, x00, x10);
+        float r1 = lerp(y, y1, y2, x01, x11);
 
         return lerp(z, z1, z2, r0, r1);
     }

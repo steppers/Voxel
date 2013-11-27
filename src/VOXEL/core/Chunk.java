@@ -90,7 +90,7 @@ public class Chunk extends GameObject {
             for (int y = 0; y < VoxelGame.CHUNK_SIZE_Y; y++) {
                 for (int z = 0; z < VoxelGame.CHUNK_SIZE_XZ; z++) {
                     
-                    if (VoxelGame.perlin.PerlinNoise_3D(((chunkPos.getX() * VoxelGame.CHUNK_SIZE_XZ) + x), ((chunkPos.getY() * VoxelGame.CHUNK_SIZE_Y) + y), ((chunkPos.getZ() * VoxelGame.CHUNK_SIZE_XZ) + z)) > 0) {
+                    if (WorldGenerator.GetVoxel(x, y, z, chunkPos) > 0) {
                         voxels[x][y][z] = new voxel();
                         voxels[x][y][z].setType(1);
                         voxels[x][y][z].setLight((short)0);

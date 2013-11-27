@@ -8,7 +8,7 @@ public class Perlin {
     private long seed;
     private Random rand;
     private int octave0 = 1;
-    private float persistence = 0.2f;
+    private float persistence = 0.4f;
 
     public Perlin(long seed) {
         this.seed = seed;
@@ -106,6 +106,7 @@ public class Perlin {
         float total = 0;
 
         double freq;
+        double amp;
 
         for (int i = 0; i < octave0; i++) {
 
