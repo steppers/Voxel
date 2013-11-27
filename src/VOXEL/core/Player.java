@@ -222,7 +222,7 @@ public class Player extends Component {
     }
     
     public void resetPlayer(){
-        gameObject.getTransform().setPos(32, 64, 32);
+        gameObject.getTransform().setPos(32, 120, 32);
         gameObject.getTransform().setRotation(0, 0, 0);
     }
 }

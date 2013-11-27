@@ -33,7 +33,7 @@ public class VoxelGame {
         player.AddComponent(new FPSCamera(player));
         player.AddComponent(new Player(player));
         player.getComponent(Camera.class).setPerspective(70, 0.01f, 1000f);
-        player.getTransform().setPos(32, 64f, 32f);
+        player.getTransform().setPos(32, 100f, 32f);
         player.getTransform().setRotation(-45, 0, 0);
         Scene.addGameObject(player);
 

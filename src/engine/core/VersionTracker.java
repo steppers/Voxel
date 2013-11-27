@@ -16,11 +16,11 @@ public class VersionTracker {
             BufferedReader reader;
             reader = new BufferedReader(new FileReader("./versionHistory/version.txt"));
             version = reader.readLine();
-            float v = Float.parseFloat(version);
+            int v = Integer.parseInt(version);
             reader.close();
 
             PrintWriter writer = new PrintWriter("./versionHistory/version.txt");
-            writer.println(String.valueOf(v += 0.1f));
+            writer.println(String.valueOf(++v));
             writer.close();
 
         } catch (FileNotFoundException ex) {
