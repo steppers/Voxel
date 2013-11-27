@@ -104,16 +104,7 @@ public class Perlin {
 
     public float PerlinNoise_3D(float x, float y, float z) {
         float total = 0;
-
-        double freq;
-        double amp;
-
-        for (int i = 0; i < octave0; i++) {
-
-            freq = Math.pow(2, i);
-
-            total += InterpolatedNoise3D((float) (x * freq), (float) (y * freq), (float) (z * freq));
-        }
+        total += InterpolatedNoise3D(x, y, z);
         return total;
     }
 }
