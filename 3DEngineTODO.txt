@@ -1,0 +1,33 @@
+BIG TOPICS:
+-Rendering Engine
+
+OTHER TOPICS:
+-Some way to insert game into engine
+-Better scratchpad support
+-Better textures (Reading, blitting, basic image processing)
+-Some way to separate game and engine data
+-Add higher level rendering constructs (Shaders, Materials, Meshes, transforms)
+-Add some form of automatic shader selection
+-Add some form of primitives (Rectangles, Spheres, cubes)
+-More flexible Transform class (default values for projection and camera)
+-Non perspective views (Orthogonal)
+-Texture manipulation (Translation, Rotation, Scale)
+-More control over textures(Filtering, formatting)
+-More friendly constructors
+-Camera look limits
+-Window should have more properties (Center, Fullscreen, MouseLocking?)
+-Better vector math (normalisation, +=, Common Constants, Swizzle support)
+-Options class/system, some place to read values that the player chooses
+-Centralised "level" or "Scene" class that holds the data the game is using.
+
+VOXEL ENGINE SPECIFIC:
+-Rewrite/Optimise (with comments!)
+-Voxel Sprites
+-Lighting system
+-Terrain Generator (3D Perlin, Buildings props, voxel sprites)
+-Weapons
+-Particles
+-GUI (Menus, HUD, crosshair)
+-Multiplayer
+-Player Meshes
+-pickups (voxel sprites)
