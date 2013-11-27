@@ -86,52 +86,18 @@ public class Chunk extends GameObject {
     }
 
     public void genChunk() {
-        float[][][] chunkValues = new float[VoxelGame.CHUNK_SIZE_XZ/4][VoxelGame.CHUNK_SIZE_Y/4][VoxelGame.CHUNK_SIZE_XZ/4];
-        for (int x = 0; x < VoxelGame.CHUNK_SIZE_XZ/4; x++) {
-            for (int y = 0; y < VoxelGame.CHUNK_SIZE_Y/4; y++) {
-                for (int z = 0; z < VoxelGame.CHUNK_SIZE_XZ/4; z++) {
-                    chunkValues[x][y][z] = VoxelGame.perlin.PerlinNoise_3D(((chunkPos.getX() * VoxelGame.CHUNK_SIZE_XZ) + x*4) / 5.73f, ((chunkPos.getY() * VoxelGame.CHUNK_SIZE_Y) + y*4) / 5.73f, ((chunkPos.getZ() * VoxelGame.CHUNK_SIZE_XZ) + z*4) / 5.73f);
-                }
-            }
-        }
-        int x4;
-        int y4;
-        int z4;
         for (int x = 0; x < VoxelGame.CHUNK_SIZE_XZ; x++) {
             for (int y = 0; y < VoxelGame.CHUNK_SIZE_Y; y++) {
                 for (int z = 0; z < VoxelGame.CHUNK_SIZE_XZ; z++) {
-                    voxels[x][y][z] = new voxel();
-                    x4 = (int)(x/4);
-                    y4 = (int)(y/4);
-                    z4 = (int)(z/4);
-                    
-                    
-                    if(x4+1 < VoxelGame.CHUNK_SIZE_XZ/4 && y4+1 < VoxelGame.CHUNK_SIZE_Y/4 && z4+1 < VoxelGame.CHUNK_SIZE_XZ/4){
-                        if(VoxelMath.triLerp((x%4)/4, (y%4)/4, (z%4)/4, chunkValues[x4][y4][z4], chunkValues[x4][y4][z4+1], chunkValues[x4][y4+1][z4], chunkValues[x4][y4+1][z4+1],
-                                                                    chunkValues[x4+1][y4][z4], chunkValues[x4+1][y4][z4+1], chunkValues[x4+1][y4+1][z4], chunkValues[x4+1][y4+1][z4+1], 0, 1, 0, 1, 0, 1) > 0){
-                            voxels[x][y][z].setType(1);
-                            voxels[x][y][z].setLight((short)0);
-                        }else{
-                            voxels[x][y][z].setType(0);
-                            voxels[x][y][z].setLight((short)16);
-                        }
-                    }else{
-                        if(VoxelGame.perlin.PerlinNoise_3D(((chunkPos.getX() * VoxelGame.CHUNK_SIZE_XZ) + x), ((chunkPos.getY() * VoxelGame.CHUNK_SIZE_Y) + y), ((chunkPos.getZ() * VoxelGame.CHUNK_SIZE_XZ) + z)) > 0){
-                            voxels[x][y][z].setType(1);
-                            voxels[x][y][z].setLight((short)0);
-                        }else{
-                            voxels[x][y][z].setType(0);
-                            voxels[x][y][z].setLight((short)16);
-                        }
+                    if (y < (VoxelGame.perlin.PerlinNoise_2D(((chunkPos.getX() * VoxelGame.CHUNK_SIZE_XZ) + x) / 5.73f, ((chunkPos.getZ() * VoxelGame.CHUNK_SIZE_XZ) + z) / 5.73f) * 10) + 40) {
+                        voxels[x][y][z] = new voxel();
+                        voxels[x][y][z].setType(1);
+                        voxels[x][y][z].setLight((short)0);
+                    } else {
+                        voxels[x][y][z] = new voxel();
+                        voxels[x][y][z].setType(0);
+                        voxels[x][y][z].setLight((short)16);
                     }
-                    
-//                    if (y < (VoxelGame.perlin.PerlinNoise_2D(((chunkPos.getX() * VoxelGame.CHUNK_SIZE_XZ) + x) / 5.73f, ((chunkPos.getZ() * VoxelGame.CHUNK_SIZE_XZ) + z) / 5.73f) * 10) + 40) {
-//                        voxels[x][y][z].setType(1);
-//                        voxels[x][y][z].setLight((short)0);
-//                    } else {
-//                        voxels[x][y][z].setType(0);
-//                        voxels[x][y][z].setLight((short)16);
-//                    }
                 }
             }
         }

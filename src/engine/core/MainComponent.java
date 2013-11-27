@@ -121,7 +121,7 @@ public class MainComponent {
     public static void main(String[] args) {
         VersionTracker.UpdateVersionData();
         Window.createWindow(TITLE + "Build " + VersionTracker.version);
-        Window.setFullscreen(true);
+        Window.setFullscreen(false);
 
         MainComponent game = new MainComponent();
 

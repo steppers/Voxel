@@ -91,8 +91,8 @@ public class Perlin {
         float i3 = CosineInterpolate(v5, v6, fX);
         float i4 = CosineInterpolate(v7, v8, fX);
 
-        float i5 = CosineInterpolate(v1, v3, fZ);
-        float i6 = CosineInterpolate(v2, v4, fZ);
+        float i5 = CosineInterpolate(i1, i3, fZ);
+        float i6 = CosineInterpolate(i2, i4, fZ);
 
         return CosineInterpolate(i5, i6, fY);
     }
