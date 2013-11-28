@@ -11,7 +11,8 @@ import java.util.Random;
 public class VoxelGame {
 
     public static final int CHUNK_SIZE_XZ = 16;
-    public static final int CHUNK_SIZE_Y = 64;
+    public static final int CHUNK_SIZE_Y = 16;
+    public static final int MAP_DIMENSION = 7;
     public static final float VOXEL_SIZE = 1f;
     private Random rand = new Random();
     public static long seed = 4123674254L;

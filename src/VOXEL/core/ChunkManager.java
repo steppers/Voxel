@@ -10,22 +10,19 @@ public class ChunkManager
     private static final int VIEW_RANGE_CHUNKS = 8;
     
     public static void init(){
-        chunks.add(new Chunk(new Vector3f(0, 0, 0)));
-        chunks.add(new Chunk(new Vector3f(1, 0, 0)));
-        chunks.add(new Chunk(new Vector3f(2, 0, 0)));
-        chunks.add(new Chunk(new Vector3f(3, 0, 0)));
-        chunks.add(new Chunk(new Vector3f(0, 0, 1)));
-        chunks.add(new Chunk(new Vector3f(1, 0, 1)));
-        chunks.add(new Chunk(new Vector3f(2, 0, 1)));
-        chunks.add(new Chunk(new Vector3f(3, 0, 1)));
-        chunks.add(new Chunk(new Vector3f(0, 0, 2)));
-        chunks.add(new Chunk(new Vector3f(1, 0, 2)));
-        chunks.add(new Chunk(new Vector3f(2, 0, 2)));
-        chunks.add(new Chunk(new Vector3f(3, 0, 2)));
-        chunks.add(new Chunk(new Vector3f(0, 0, 3)));
-        chunks.add(new Chunk(new Vector3f(1, 0, 3)));
-        chunks.add(new Chunk(new Vector3f(2, 0, 3)));
-        chunks.add(new Chunk(new Vector3f(3, 0, 3)));
+        for(int x = 0; x < VoxelGame.MAP_DIMENSION; x++){
+            for(int y = 0; y < VoxelGame.MAP_DIMENSION; y++){
+                for(int z = 0; z < VoxelGame.MAP_DIMENSION; z++){
+                    chunks.add(new Chunk(new Vector3f(x,y,z)));
+                }
+            }
+        }
+        float time;
+        for(Chunk c : chunks){
+            time = System.nanoTime();
+            c.genChunk();
+            System.out.println("Chunk Load time: " + (System.nanoTime() - time) + "ns");
+        }
         for(Chunk c : chunks){
             c.Generate();
         }

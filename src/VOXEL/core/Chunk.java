@@ -10,7 +10,6 @@ import engine.ext.GameObject;
 import engine.ext.Scene;
 import engine.math.Vector2f;
 import engine.math.Vector3f;
-import engine.math.VoxelMath;
 import java.util.ArrayList;
 
 public class Chunk extends GameObject {
@@ -39,17 +38,10 @@ public class Chunk extends GameObject {
         this.AddComponent(filter);
         this.AddComponent(renderer);
 
-        genChunk();
-
-        getComponent(MeshRenderer.class).setMaterial(material);
-        getComponent(MeshFilter.class).setSharedMesh(mesh);
-
         Scene.addGameObject(this);
     }
 
-    public void Generate() {
-        float time = System.nanoTime();
-        genChunk();
+    public void Generate() {     
         calcLight();
         genMesh();
 
@@ -57,21 +49,21 @@ public class Chunk extends GameObject {
         getComponent(MeshFilter.class).setSharedMesh(mesh);
 
         Scene.addGameObject(this);
-        System.out.println("Chunk Load time: " + (System.nanoTime() - time));
     }
-    
-    public void calcLight(){
+
+    public void calcLight() {
         for (int x = 0; x < VoxelGame.CHUNK_SIZE_XZ; x++) {
             for (int y = 0; y < VoxelGame.CHUNK_SIZE_Y; y++) {
                 for (int z = 0; z < VoxelGame.CHUNK_SIZE_XZ; z++) {
                     if (voxels[x][y][z].getType() == 0) {
-                        for(int i = 1; i < VoxelGame.CHUNK_SIZE_Y - (y+1); i++){
-                            if(voxels[x][y+i][z].getType() != 0){
+                        for (int i = 1; i < VoxelGame.CHUNK_SIZE_Y - (y + 1); i++) {
+                            if (voxels[x][y + i][z].getType() != 0) {
                                 voxels[x][y][z].setLight(9);
                                 break;
                             }
-                            if(i == VoxelGame.CHUNK_SIZE_Y - (y+2))
+                            if (i == VoxelGame.CHUNK_SIZE_Y - (y + 2)) {
                                 voxels[x][y][z].setLight(16);
+                            }
                         }
                     }
                 }
@@ -88,7 +80,7 @@ public class Chunk extends GameObject {
     public void genChunk() {
         for (int x = 0; x < VoxelGame.CHUNK_SIZE_XZ; x++) {
             for (int y = 0; y < VoxelGame.CHUNK_SIZE_Y; y++) {
-                for (int z = 0; z < VoxelGame.CHUNK_SIZE_XZ; z++) {                   
+                for (int z = 0; z < VoxelGame.CHUNK_SIZE_XZ; z++) {
                     voxels[x][y][z] = WorldGenerator.GetVoxel(x, y, z, chunkPos);
                 }
             }
@@ -136,7 +128,7 @@ public class Chunk extends GameObject {
 
     private VoxelSurrounding genSurrounding(int x, int y, int z) {
         VoxelSurrounding s = new VoxelSurrounding();
-        
+
         s.vs[1][1][1] = voxels[x][y][z];
 
         //Top, bottom, left, right, front, back
@@ -481,25 +473,28 @@ public class Chunk extends GameObject {
         Vertex v7 = new Vertex(new Vector3f(pos.getX() * VoxelGame.VOXEL_SIZE + VoxelGame.VOXEL_SIZE, pos.getY() * VoxelGame.VOXEL_SIZE, pos.getZ() * VoxelGame.VOXEL_SIZE + VoxelGame.VOXEL_SIZE));
         Vertex v8 = new Vertex(new Vector3f(pos.getX() * VoxelGame.VOXEL_SIZE + VoxelGame.VOXEL_SIZE, pos.getY() * VoxelGame.VOXEL_SIZE + VoxelGame.VOXEL_SIZE, pos.getZ() * VoxelGame.VOXEL_SIZE));
 
+        if(s.vs[0][1][1] == null){
+            return;
+        }
         //Left
         if (s.vs[0][1][1].getType() == 0) {
-            Vertex t1 = new Vertex(v1.getPos()).setColor(Color.white.mul((float)s.vs[0][1][1].getLight()/16)).setTexCoord(uv[0]);
-            Vertex t2 = new Vertex(v2.getPos()).setColor(Color.white.mul((float)s.vs[0][1][1].getLight()/16)).setTexCoord(uv[3]);
-            Vertex t3 = new Vertex(v3.getPos()).setColor(Color.white.mul((float)s.vs[0][1][1].getLight()/16)).setTexCoord(uv[1]);
-            Vertex t4 = new Vertex(v4.getPos()).setColor(Color.white.mul((float)s.vs[0][1][1].getLight()/16)).setTexCoord(uv[2]);
+            Vertex t1 = new Vertex(v1.getPos()).setColor(Color.white.mul((float) s.vs[0][1][1].getLight() / 16)).setTexCoord(uv[0]);
+            Vertex t2 = new Vertex(v2.getPos()).setColor(Color.white.mul((float) s.vs[0][1][1].getLight() / 16)).setTexCoord(uv[3]);
+            Vertex t3 = new Vertex(v3.getPos()).setColor(Color.white.mul((float) s.vs[0][1][1].getLight() / 16)).setTexCoord(uv[1]);
+            Vertex t4 = new Vertex(v4.getPos()).setColor(Color.white.mul((float) s.vs[0][1][1].getLight() / 16)).setTexCoord(uv[2]);
             if (s.vs[0][1][2].getType() != 0 || s.vs[0][2][2].getType() != 0 || s.vs[0][2][1].getType() != 0) {
-                t1.setColor(Color.white.mul(AOFactor).mul((float)s.vs[0][1][1].getLight()/16));
+                t1.setColor(Color.white.mul(AOFactor).mul((float) s.vs[0][1][1].getLight() / 16));
                 invert = true;
             }
             if (s.vs[0][0][1].getType() != 0 || s.vs[0][0][0].getType() != 0 || s.vs[0][1][0].getType() != 0) {
-                t2.setColor(Color.white.mul(AOFactor).mul((float)s.vs[0][1][1].getLight()/16));
+                t2.setColor(Color.white.mul(AOFactor).mul((float) s.vs[0][1][1].getLight() / 16));
             }
             if (s.vs[0][1][2].getType() != 0 || s.vs[0][0][2].getType() != 0 || s.vs[0][0][1].getType() != 0) {
-                t3.setColor(Color.white.mul(AOFactor).mul((float)s.vs[0][1][1].getLight()/16));
+                t3.setColor(Color.white.mul(AOFactor).mul((float) s.vs[0][1][1].getLight() / 16));
                 invert2 = true;
             }
             if (s.vs[0][2][1].getType() != 0 || s.vs[0][2][0].getType() != 0 || s.vs[0][1][0].getType() != 0) {
-                t4.setColor(Color.white.mul(AOFactor).mul((float)s.vs[0][1][1].getLight()/16));
+                t4.setColor(Color.white.mul(AOFactor).mul((float) s.vs[0][1][1].getLight() / 16));
             }
             if ((!invert && invert2) || (invert && !invert2)) {
                 vertices.add(t1);
@@ -521,25 +516,28 @@ public class Chunk extends GameObject {
             invert = false;
             invert2 = false;
         }
+        if(s.vs[1][0][1] == null){
+            return;
+        }
         //Bottom
         if (s.vs[1][0][1].getType() == 0) {
-            Vertex t3 = new Vertex(v3.getPos()).setColor(Color.white.mul((float)s.vs[1][0][1].getLight()/16)).setTexCoord(uv[0]);
-            Vertex t6 = new Vertex(v6.getPos()).setColor(Color.white.mul((float)s.vs[1][0][1].getLight()/16)).setTexCoord(uv[3]);
-            Vertex t7 = new Vertex(v7.getPos()).setColor(Color.white.mul((float)s.vs[1][0][1].getLight()/16)).setTexCoord(uv[1]);
-            Vertex t2 = new Vertex(v2.getPos()).setColor(Color.white.mul((float)s.vs[1][0][1].getLight()/16)).setTexCoord(uv[2]);
+            Vertex t3 = new Vertex(v3.getPos()).setColor(Color.white.mul((float) s.vs[1][0][1].getLight() / 16)).setTexCoord(uv[0]);
+            Vertex t6 = new Vertex(v6.getPos()).setColor(Color.white.mul((float) s.vs[1][0][1].getLight() / 16)).setTexCoord(uv[3]);
+            Vertex t7 = new Vertex(v7.getPos()).setColor(Color.white.mul((float) s.vs[1][0][1].getLight() / 16)).setTexCoord(uv[1]);
+            Vertex t2 = new Vertex(v2.getPos()).setColor(Color.white.mul((float) s.vs[1][0][1].getLight() / 16)).setTexCoord(uv[2]);
             if (s.vs[0][0][1].getType() != 0 || s.vs[0][0][2].getType() != 0 || s.vs[1][0][2].getType() != 0) {
-                t3.setColor(Color.white.mul(AOFactor).mul((float)s.vs[1][0][1].getLight()/16));
+                t3.setColor(Color.white.mul(AOFactor).mul((float) s.vs[1][0][1].getLight() / 16));
                 invert = true;
             }
             if (s.vs[2][0][1].getType() != 0 || s.vs[2][0][0].getType() != 0 || s.vs[1][0][0].getType() != 0) {
-                t6.setColor(Color.white.mul(AOFactor).mul((float)s.vs[1][0][1].getLight()/16));
+                t6.setColor(Color.white.mul(AOFactor).mul((float) s.vs[1][0][1].getLight() / 16));
             }
             if (s.vs[1][0][2].getType() != 0 || s.vs[2][0][2].getType() != 0 || s.vs[2][0][1].getType() != 0) {
-                t7.setColor(Color.white.mul(AOFactor).mul((float)s.vs[1][0][1].getLight()/16));
+                t7.setColor(Color.white.mul(AOFactor).mul((float) s.vs[1][0][1].getLight() / 16));
                 invert2 = true;
             }
             if (s.vs[0][0][1].getType() != 0 || s.vs[0][0][0].getType() != 0 || s.vs[1][0][0].getType() != 0) {
-                t2.setColor(Color.white.mul(AOFactor).mul((float)s.vs[1][0][1].getLight()/16));
+                t2.setColor(Color.white.mul(AOFactor).mul((float) s.vs[1][0][1].getLight() / 16));
             }
             if ((!invert && invert2) || (invert && !invert2)) {
                 vertices.add(t3);
@@ -560,26 +558,29 @@ public class Chunk extends GameObject {
             indices.add(vertices.size() - 3);
             invert = false;
             invert2 = false;
+        }
+        if(s.vs[1][1][0] == null){
+            return;
         }
         //Front
         if (s.vs[1][1][0].getType() == 0) {
-            Vertex t4 = new Vertex(v4.getPos()).setColor(Color.white.mul((float)s.vs[1][1][0].getLight()/16)).setTexCoord(uv[0]);
-            Vertex t6 = new Vertex(v6.getPos()).setColor(Color.white.mul((float)s.vs[1][1][0].getLight()/16)).setTexCoord(uv[3]);
-            Vertex t2 = new Vertex(v2.getPos()).setColor(Color.white.mul((float)s.vs[1][1][0].getLight()/16)).setTexCoord(uv[1]);
-            Vertex t8 = new Vertex(v8.getPos()).setColor(Color.white.mul((float)s.vs[1][1][0].getLight()/16)).setTexCoord(uv[2]);
+            Vertex t4 = new Vertex(v4.getPos()).setColor(Color.white.mul((float) s.vs[1][1][0].getLight() / 16)).setTexCoord(uv[0]);
+            Vertex t6 = new Vertex(v6.getPos()).setColor(Color.white.mul((float) s.vs[1][1][0].getLight() / 16)).setTexCoord(uv[3]);
+            Vertex t2 = new Vertex(v2.getPos()).setColor(Color.white.mul((float) s.vs[1][1][0].getLight() / 16)).setTexCoord(uv[1]);
+            Vertex t8 = new Vertex(v8.getPos()).setColor(Color.white.mul((float) s.vs[1][1][0].getLight() / 16)).setTexCoord(uv[2]);
             if (s.vs[0][1][0].getType() != 0 || s.vs[0][2][0].getType() != 0 || s.vs[1][2][0].getType() != 0) {
-                t4.setColor(Color.white.mul(AOFactor).mul((float)s.vs[1][1][0].getLight()/16));
+                t4.setColor(Color.white.mul(AOFactor).mul((float) s.vs[1][1][0].getLight() / 16));
                 invert = true;
             }
             if (s.vs[2][1][0].getType() != 0 || s.vs[2][0][0].getType() != 0 || s.vs[1][0][0].getType() != 0) {
-                t6.setColor(Color.white.mul(AOFactor).mul((float)s.vs[1][1][0].getLight()/16));
+                t6.setColor(Color.white.mul(AOFactor).mul((float) s.vs[1][1][0].getLight() / 16));
             }
             if (s.vs[0][1][0].getType() != 0 || s.vs[0][0][0].getType() != 0 || s.vs[1][0][0].getType() != 0) {
-                t2.setColor(Color.white.mul(AOFactor).mul((float)s.vs[1][1][0].getLight()/16));
+                t2.setColor(Color.white.mul(AOFactor).mul((float) s.vs[1][1][0].getLight() / 16));
                 invert2 = true;
             }
             if (s.vs[1][2][0].getType() != 0 || s.vs[2][2][0].getType() != 0 || s.vs[2][1][0].getType() != 0) {
-                t8.setColor(Color.white.mul(AOFactor).mul((float)s.vs[1][1][0].getLight()/16));
+                t8.setColor(Color.white.mul(AOFactor).mul((float) s.vs[1][1][0].getLight() / 16));
             }
             if ((!invert && invert2) || (invert && !invert2)) {
                 vertices.add(t4);
@@ -600,26 +601,29 @@ public class Chunk extends GameObject {
             indices.add(vertices.size() - 3);
             invert = false;
             invert2 = false;
+        }
+        if(s.vs[2][1][1] == null){
+            return;
         }
         //Right
         if (s.vs[2][1][1].getType() == 0) {
-            Vertex t5 = new Vertex(v5.getPos()).setColor(Color.white.mul((float)s.vs[2][1][1].getLight()/16)).setTexCoord(uv[0]);
-            Vertex t6 = new Vertex(v6.getPos()).setColor(Color.white.mul((float)s.vs[2][1][1].getLight()/16)).setTexCoord(uv[3]);
-            Vertex t7 = new Vertex(v7.getPos()).setColor(Color.white.mul((float)s.vs[2][1][1].getLight()/16)).setTexCoord(uv[1]);
-            Vertex t8 = new Vertex(v8.getPos()).setColor(Color.white.mul((float)s.vs[2][1][1].getLight()/16)).setTexCoord(uv[2]);
+            Vertex t5 = new Vertex(v5.getPos()).setColor(Color.white.mul((float) s.vs[2][1][1].getLight() / 16)).setTexCoord(uv[0]);
+            Vertex t6 = new Vertex(v6.getPos()).setColor(Color.white.mul((float) s.vs[2][1][1].getLight() / 16)).setTexCoord(uv[3]);
+            Vertex t7 = new Vertex(v7.getPos()).setColor(Color.white.mul((float) s.vs[2][1][1].getLight() / 16)).setTexCoord(uv[1]);
+            Vertex t8 = new Vertex(v8.getPos()).setColor(Color.white.mul((float) s.vs[2][1][1].getLight() / 16)).setTexCoord(uv[2]);
             if (s.vs[2][2][1].getType() != 0 || s.vs[2][2][2].getType() != 0 || s.vs[2][1][2].getType() != 0) {
-                t5.setColor(Color.white.mul(AOFactor).mul((float)s.vs[2][1][1].getLight()/16));
+                t5.setColor(Color.white.mul(AOFactor).mul((float) s.vs[2][1][1].getLight() / 16));
                 invert = true;
             }
             if (s.vs[2][0][1].getType() != 0 || s.vs[2][0][0].getType() != 0 || s.vs[2][1][0].getType() != 0) {
-                t6.setColor(Color.white.mul(AOFactor).mul((float)s.vs[2][1][1].getLight()/16));
+                t6.setColor(Color.white.mul(AOFactor).mul((float) s.vs[2][1][1].getLight() / 16));
             }
             if (s.vs[2][1][2].getType() != 0 || s.vs[2][0][2].getType() != 0 || s.vs[2][0][1].getType() != 0) {
-                t7.setColor(Color.white.mul(AOFactor).mul((float)s.vs[2][1][1].getLight()/16));
+                t7.setColor(Color.white.mul(AOFactor).mul((float) s.vs[2][1][1].getLight() / 16));
                 invert2 = true;
             }
             if (s.vs[2][2][1].getType() != 0 || s.vs[2][2][0].getType() != 0 || s.vs[2][1][0].getType() != 0) {
-                t8.setColor(Color.white.mul(AOFactor).mul((float)s.vs[2][1][1].getLight()/16));
+                t8.setColor(Color.white.mul(AOFactor).mul((float) s.vs[2][1][1].getLight() / 16));
             }
             if ((!invert && invert2) || (invert && !invert2)) {
                 vertices.add(t5);
@@ -640,26 +644,29 @@ public class Chunk extends GameObject {
             indices.add(vertices.size() - 4);
             invert = false;
             invert2 = false;
+        }
+        if(s.vs[1][2][1] == null){
+            return;
         }
         //Top
         if (s.vs[1][2][1].getType() == 0) {
-            Vertex t1 = new Vertex(v1.getPos()).setColor(Color.white.mul((float)s.vs[1][2][1].getLight()/16).mul(0.75f)).setTexCoord(uv[0]);
-            Vertex t8 = new Vertex(v8.getPos()).setColor(Color.white.mul((float)s.vs[1][2][1].getLight()/16).mul(0.75f)).setTexCoord(uv[3]);
-            Vertex t5 = new Vertex(v5.getPos()).setColor(Color.white.mul((float)s.vs[1][2][1].getLight()/16).mul(0.75f)).setTexCoord(uv[1]);
-            Vertex t4 = new Vertex(v4.getPos()).setColor(Color.white.mul((float)s.vs[1][2][1].getLight()/16).mul(0.75f)).setTexCoord(uv[2]);
+            Vertex t1 = new Vertex(v1.getPos()).setColor(Color.white.mul((float) s.vs[1][2][1].getLight() / 16).mul(0.75f)).setTexCoord(uv[0]);
+            Vertex t8 = new Vertex(v8.getPos()).setColor(Color.white.mul((float) s.vs[1][2][1].getLight() / 16).mul(0.75f)).setTexCoord(uv[3]);
+            Vertex t5 = new Vertex(v5.getPos()).setColor(Color.white.mul((float) s.vs[1][2][1].getLight() / 16).mul(0.75f)).setTexCoord(uv[1]);
+            Vertex t4 = new Vertex(v4.getPos()).setColor(Color.white.mul((float) s.vs[1][2][1].getLight() / 16).mul(0.75f)).setTexCoord(uv[2]);
             if (s.vs[0][2][1].getType() != 0 || s.vs[0][2][2].getType() != 0 || s.vs[1][2][2].getType() != 0) {
-                t1.setColor(Color.white.mul(AOFactor).mul((float)s.vs[1][2][1].getLight()/16).mul(0.75f));
+                t1.setColor(Color.white.mul(AOFactor).mul((float) s.vs[1][2][1].getLight() / 16).mul(0.75f));
                 invert = true;
             }
             if (s.vs[2][2][1].getType() != 0 || s.vs[2][2][0].getType() != 0 || s.vs[1][2][0].getType() != 0) {
-                t8.setColor(Color.white.mul(AOFactor).mul((float)s.vs[1][2][1].getLight()/16).mul(0.75f));
+                t8.setColor(Color.white.mul(AOFactor).mul((float) s.vs[1][2][1].getLight() / 16).mul(0.75f));
             }
             if (s.vs[1][2][2].getType() != 0 || s.vs[2][2][2].getType() != 0 || s.vs[2][2][1].getType() != 0) {
-                t5.setColor(Color.white.mul(AOFactor).mul((float)s.vs[1][2][1].getLight()/16).mul(0.75f));
+                t5.setColor(Color.white.mul(AOFactor).mul((float) s.vs[1][2][1].getLight() / 16).mul(0.75f));
                 invert2 = true;
             }
             if (s.vs[0][2][1].getType() != 0 || s.vs[0][2][0].getType() != 0 || s.vs[1][2][0].getType() != 0) {
-                t4.setColor(Color.white.mul(AOFactor).mul((float)s.vs[1][2][1].getLight()/16).mul(0.75f));
+                t4.setColor(Color.white.mul(AOFactor).mul((float) s.vs[1][2][1].getLight() / 16).mul(0.75f));
             }
             if ((!invert && invert2) || (invert && !invert2)) {
                 vertices.add(t1);
@@ -681,25 +688,28 @@ public class Chunk extends GameObject {
             invert = false;
             invert2 = false;
         }
+        if(s.vs[1][1][2] == null){
+            return;
+        }
         //Back
         if (s.vs[1][1][2].getType() == 0) {
-            Vertex t1 = new Vertex(v1.getPos()).setColor(Color.white.mul((float)s.vs[1][1][2].getLight()/16)).setTexCoord(uv[0]);
-            Vertex t7 = new Vertex(v7.getPos()).setColor(Color.white.mul((float)s.vs[1][1][2].getLight()/16)).setTexCoord(uv[3]);
-            Vertex t3 = new Vertex(v3.getPos()).setColor(Color.white.mul((float)s.vs[1][1][2].getLight()/16)).setTexCoord(uv[1]);
-            Vertex t5 = new Vertex(v5.getPos()).setColor(Color.white.mul((float)s.vs[1][1][2].getLight()/16)).setTexCoord(uv[2]);
+            Vertex t1 = new Vertex(v1.getPos()).setColor(Color.white.mul((float) s.vs[1][1][2].getLight() / 16)).setTexCoord(uv[0]);
+            Vertex t7 = new Vertex(v7.getPos()).setColor(Color.white.mul((float) s.vs[1][1][2].getLight() / 16)).setTexCoord(uv[3]);
+            Vertex t3 = new Vertex(v3.getPos()).setColor(Color.white.mul((float) s.vs[1][1][2].getLight() / 16)).setTexCoord(uv[1]);
+            Vertex t5 = new Vertex(v5.getPos()).setColor(Color.white.mul((float) s.vs[1][1][2].getLight() / 16)).setTexCoord(uv[2]);
             if (s.vs[1][2][2].getType() != 0 || s.vs[0][2][2].getType() != 0 || s.vs[0][1][2].getType() != 0) {
-                t1.setColor(Color.white.mul(AOFactor).mul((float)s.vs[1][1][2].getLight()/16));
+                t1.setColor(Color.white.mul(AOFactor).mul((float) s.vs[1][1][2].getLight() / 16));
                 invert = true;
             }
             if (s.vs[1][0][2].getType() != 0 || s.vs[2][0][2].getType() != 0 || s.vs[2][1][2].getType() != 0) {
-                t7.setColor(Color.white.mul(AOFactor).mul((float)s.vs[1][1][2].getLight()/16));
+                t7.setColor(Color.white.mul(AOFactor).mul((float) s.vs[1][1][2].getLight() / 16));
             }
             if (s.vs[0][1][2].getType() != 0 || s.vs[0][0][2].getType() != 0 || s.vs[1][0][2].getType() != 0) {
-                t3.setColor(Color.white.mul(AOFactor).mul((float)s.vs[1][1][2].getLight()/16));
+                t3.setColor(Color.white.mul(AOFactor).mul((float) s.vs[1][1][2].getLight() / 16));
                 invert2 = true;
             }
             if (s.vs[1][2][2].getType() != 0 || s.vs[2][2][2].getType() != 0 || s.vs[2][1][2].getType() != 0) {
-                t5.setColor(Color.white.mul(AOFactor).mul((float)s.vs[1][1][2].getLight()/16));
+                t5.setColor(Color.white.mul(AOFactor).mul((float) s.vs[1][1][2].getLight() / 16));
             }
             if ((!invert && invert2) || (invert && !invert2)) {
                 vertices.add(t1);
@@ -727,28 +737,28 @@ public class Chunk extends GameObject {
         Vector2f[] uv = new Vector2f[4];
         float x, y;
         x = type % 16;
-        y = (int)(type/16);
+        y = (int) (type / 16);
 
-        uv[0] = new Vector2f(x*0.125f, y*0.125f);
-        uv[1] = new Vector2f(x*0.125f + 0.125f, y*0.125f);
-        uv[2] = new Vector2f(x*0.125f, y*0.125f + 0.125f);
-        uv[3] = new Vector2f(x*0.125f + 0.125f, y*0.125f + 0.125f);
+        uv[0] = new Vector2f(x * 0.125f, y * 0.125f);
+        uv[1] = new Vector2f(x * 0.125f + 0.125f, y * 0.125f);
+        uv[2] = new Vector2f(x * 0.125f, y * 0.125f + 0.125f);
+        uv[3] = new Vector2f(x * 0.125f + 0.125f, y * 0.125f + 0.125f);
         return uv;
     }
-    
-    private Vector3f[] getTypeColor(int type){
+
+    private Vector3f[] getTypeColor(int type) {
         Vector3f[] c = new Vector3f[6];
-        for(int i = 0; i < 6; i++){
+        for (int i = 0; i < 6; i++) {
             c[i] = Color.white;
         }
-        switch(type){
+        switch (type) {
             case 1:
         }
         return c;
     }
-    
-    public Chunk getAdjactentChunk(int x, int y, int z){
-        Chunk c = ChunkManager.getChunk((int)(chunkPos.getX() + x), (int)(chunkPos.getY() + y), (int)(chunkPos.getZ() + z));
+
+    public Chunk getAdjactentChunk(int x, int y, int z) {
+        Chunk c = ChunkManager.getChunk((int) (chunkPos.getX() + x), (int) (chunkPos.getY() + y), (int) (chunkPos.getZ() + z));
         return c;
     }
 }

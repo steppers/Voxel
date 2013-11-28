@@ -14,7 +14,7 @@ public class Player extends Component {
     
     public float gravity = 25f;
     public float YVelocity = 0;
-    public float TerminalVel = 16f;
+    public float TerminalVel = 22f;
     
     public int pickingRange = 5;
     public voxel selected;
