@@ -11,9 +11,12 @@ import java.util.Random;
 public class VoxelGame {
 
     public static final int CHUNK_SIZE_XZ = 16;
-    public static final int CHUNK_SIZE_Y = 16;
-    public static final int MAP_DIMENSION = 4;
+    public static final int CHUNK_SIZE_Y = 64;
+    public static final int Y_DIMENSION = 1;
     public static final float VOXEL_SIZE = 1f;
+    
+    public static final float VIEW_DISTANCE = 90f;
+    
     private Random rand = new Random();
     public static long seed = 4123674254L;
     public static String texturePackName = "terrainv2.png";
@@ -31,11 +34,11 @@ public class VoxelGame {
         player = new GameObject();
         player.setTag("Camera");
         player.AddComponent(new Camera(player));
-        //player.AddComponent(new FreeFlyCamera(player));
-        player.AddComponent(new FPSCamera(player));
-        player.AddComponent(new Player(player));
+        player.AddComponent(new FreeFlyCamera(player));
+//        player.AddComponent(new FPSCamera(player));
+//        player.AddComponent(new Player(player));
         player.getComponent(Camera.class).setPerspective(70, 0.01f, 1000f);
-        player.getTransform().setPos(32, (MAP_DIMENSION*CHUNK_SIZE_Y*VOXEL_SIZE)+5f, 32f);
+        player.getTransform().setPos(32, (CHUNK_SIZE_Y*VOXEL_SIZE)+5f, 32f);
         player.getTransform().setRotation(-45, 0, 0);
         Scene.addGameObject(player);
 
@@ -55,6 +58,7 @@ public class VoxelGame {
 
     public void update() {
         Scene.update();
+        ChunkManager.update();
     }
 
     public void render() {

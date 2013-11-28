@@ -37,8 +37,6 @@ public class Chunk extends GameObject {
         renderer.setMaterial(material);
         this.AddComponent(filter);
         this.AddComponent(renderer);
-
-        Scene.addGameObject(this);
     }
 
     public void Generate() {     
@@ -472,10 +470,7 @@ public class Chunk extends GameObject {
         Vertex v6 = new Vertex(new Vector3f(pos.getX() * VoxelGame.VOXEL_SIZE + VoxelGame.VOXEL_SIZE, pos.getY() * VoxelGame.VOXEL_SIZE, pos.getZ() * VoxelGame.VOXEL_SIZE));
         Vertex v7 = new Vertex(new Vector3f(pos.getX() * VoxelGame.VOXEL_SIZE + VoxelGame.VOXEL_SIZE, pos.getY() * VoxelGame.VOXEL_SIZE, pos.getZ() * VoxelGame.VOXEL_SIZE + VoxelGame.VOXEL_SIZE));
         Vertex v8 = new Vertex(new Vector3f(pos.getX() * VoxelGame.VOXEL_SIZE + VoxelGame.VOXEL_SIZE, pos.getY() * VoxelGame.VOXEL_SIZE + VoxelGame.VOXEL_SIZE, pos.getZ() * VoxelGame.VOXEL_SIZE));
-
-        if(s.vs[0][1][1] == null){
-            return;
-        }
+        
         //Left
         if (s.vs[0][1][1].getType() == 0) {
             Vertex t1 = new Vertex(v1.getPos()).setColor(Color.white.mul((float) s.vs[0][1][1].getLight() / 16)).setTexCoord(uv[0]);
@@ -515,9 +510,6 @@ public class Chunk extends GameObject {
             indices.add(vertices.size() - 3);//2
             invert = false;
             invert2 = false;
-        }
-        if(s.vs[1][0][1] == null){
-            return;
         }
         //Bottom
         if (s.vs[1][0][1].getType() == 0) {
@@ -559,9 +551,6 @@ public class Chunk extends GameObject {
             invert = false;
             invert2 = false;
         }
-        if(s.vs[1][1][0] == null){
-            return;
-        }
         //Front
         if (s.vs[1][1][0].getType() == 0) {
             Vertex t4 = new Vertex(v4.getPos()).setColor(Color.white.mul((float) s.vs[1][1][0].getLight() / 16)).setTexCoord(uv[0]);
@@ -601,9 +590,6 @@ public class Chunk extends GameObject {
             indices.add(vertices.size() - 3);
             invert = false;
             invert2 = false;
-        }
-        if(s.vs[2][1][1] == null){
-            return;
         }
         //Right
         if (s.vs[2][1][1].getType() == 0) {
@@ -645,9 +631,6 @@ public class Chunk extends GameObject {
             invert = false;
             invert2 = false;
         }
-        if(s.vs[1][2][1] == null){
-            return;
-        }
         //Top
         if (s.vs[1][2][1].getType() == 0) {
             Vertex t1 = new Vertex(v1.getPos()).setColor(Color.white.mul((float) s.vs[1][2][1].getLight() / 16).mul(0.75f)).setTexCoord(uv[0]);
@@ -687,9 +670,6 @@ public class Chunk extends GameObject {
             indices.add(vertices.size() - 4);
             invert = false;
             invert2 = false;
-        }
-        if(s.vs[1][1][2] == null){
-            return;
         }
         //Back
         if (s.vs[1][1][2].getType() == 0) {

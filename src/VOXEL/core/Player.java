@@ -273,7 +273,7 @@ public class Player extends Component {
     }
 
     public void resetPlayer() {
-        gameObject.getTransform().setPos(32, (VoxelGame.MAP_DIMENSION * VoxelGame.CHUNK_SIZE_Y * VoxelGame.VOXEL_SIZE) + 5f, 32);
+        gameObject.getTransform().setPos(32, (VoxelGame.CHUNK_SIZE_Y * VoxelGame.VOXEL_SIZE) + 5f, 32);
         gameObject.getTransform().setRotation(0, 0, 0);
     }
 }

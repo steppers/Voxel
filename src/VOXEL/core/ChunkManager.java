@@ -1,49 +1,66 @@
 package VOXEL.core;
 
+import engine.ext.Scene;
 import engine.math.Vector3f;
+import java.util.ArrayList;
 
 public class ChunkManager 
 {
-    public static Chunk[][][] chunks = new Chunk[VoxelGame.MAP_DIMENSION][VoxelGame.MAP_DIMENSION][VoxelGame.MAP_DIMENSION];
+    public static ArrayList<Chunk> chunks = new ArrayList<>();
     
-    private static final int VIEW_RANGE_CHUNKS = 8;
+    private static final int VIEW_RANGE_CHUNKS = 2;
     
     public static void init(){
-        for(int x = 0; x < VoxelGame.MAP_DIMENSION; x++){
-            for(int y = 0; y < VoxelGame.MAP_DIMENSION; y++){
-                for(int z = 0; z < VoxelGame.MAP_DIMENSION; z++){
-                    chunks[x][y][z] = new Chunk(new Vector3f(x,y,z));
+        for(int x = 0; x < 2*VIEW_RANGE_CHUNKS; x++){
+            for(int y = 0; y < VoxelGame.Y_DIMENSION; y++){
+                for(int z = 0; z < 2*VIEW_RANGE_CHUNKS; z++){
+                    chunks.add(new Chunk(new Vector3f(x,y,z)));
                 }
             }
         }
         float time;
         float loadTime = System.currentTimeMillis();
-        for(int x = 0; x < VoxelGame.MAP_DIMENSION; x++){
-            for(int y = 0; y < VoxelGame.MAP_DIMENSION; y++){
-                for(int z = 0; z < VoxelGame.MAP_DIMENSION; z++){
-                    time = System.nanoTime();
-                    chunks[x][y][z].genChunk();
-                    System.out.println("Chunk Load time: " + (System.nanoTime() - time) + "ns");
-                }
-            }
+        for(Chunk c : chunks){
+            time = System.nanoTime();
+            c.genChunk();
+            System.out.println("Chunk Load time: " + (System.nanoTime() - time) + "ns");
         }
-        for(int x = 0; x < VoxelGame.MAP_DIMENSION; x++){
-            for(int y = 0; y < VoxelGame.MAP_DIMENSION; y++){
-                for(int z = 0; z < VoxelGame.MAP_DIMENSION; z++){
-                    chunks[x][y][z].Generate();
-                }
-            }
+
+        for(Chunk c : chunks){
+            c.Generate();
         }
         System.out.println("World Load time: " + (System.currentTimeMillis() - loadTime)/1000 + " secs");
     }
     
+    public static void update(){
+        ArrayList<Integer> del = new ArrayList<>();
+        for(Chunk c : chunks){
+            if(Scene.FindGameObjectWithTag("Camera").getTransform().getPos().sub(c.getTransform().getPos()).length() > VoxelGame.VIEW_DISTANCE){
+                del.add(chunks.indexOf(c));
+            }
+        }
+        for(Integer i : del){
+            Vector3f pos = chunks.get(i).chunkPos;
+            Scene.destroyGameObject(chunks.get(i));
+            if(getChunk((int)pos.getX() + 1, (int)pos.getY(), (int)pos.getZ()) != null)
+                getChunk((int)pos.getX() + 1, (int)pos.getY(), (int)pos.getZ()).updateMesh();
+            if(getChunk((int)pos.getX() - 1, (int)pos.getY(), (int)pos.getZ()) != null)
+                getChunk((int)pos.getX() - 1, (int)pos.getY(), (int)pos.getZ()).updateMesh();
+            if(getChunk((int)pos.getX(), (int)pos.getY(), (int)pos.getZ() + 1) != null)
+                getChunk((int)pos.getX(), (int)pos.getY(), (int)pos.getZ() + 1).updateMesh();
+            if(getChunk((int)pos.getX(), (int)pos.getY(), (int)pos.getZ() - 1) != null)
+                getChunk((int)pos.getX(), (int)pos.getY(), (int)pos.getZ() - 1).updateMesh();
+            chunks.remove(chunks.get(i));
+        }
+        del.clear();
+    }
+    
     public static Chunk getChunk(int x, int y, int z){
-        if(x >= VoxelGame.MAP_DIMENSION || y >= VoxelGame.MAP_DIMENSION || z >= VoxelGame.MAP_DIMENSION || x < 0 || y < 0 || z < 0)
-            return null;
-        if(chunks[x][y][z] != null)
-            return chunks[x][y][z];
-        else
-            return null;
+        for(Chunk c : chunks){
+            if(x == c.chunkPos.getX() && y == c.chunkPos.getY() && z == c.chunkPos.getZ())
+                return c;
+        }
+        return null;
     }
     
     public static voxel getBlockFromWorldPos(float x, float y, float z){
