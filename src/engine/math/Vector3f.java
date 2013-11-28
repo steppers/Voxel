@@ -69,6 +69,13 @@ public class Vector3f {
     public Vector3f add(Vector3f r) {
         return new Vector3f(x + r.getX(), y + r.getY(), z + r.getZ());
     }
+    
+    public void add(float X, float Y, float Z) {
+        x += X;
+        y += Y;
+        z += Z;
+    }
+
 
     public Vector3f add(float r) {
         return new Vector3f(x + r, y + r, z + r);

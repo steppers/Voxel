@@ -11,15 +11,21 @@ public class Player extends Component {
 
     public static final float width = 0.35f;
     public static final float height = 1.8f;
-    public Vector3f velocity = Vector3f.ZERO_VECTOR;
-    public Vector3f currentGravity = Vector3f.Y_AXIS.mul(-1);
+    
+    public float gravity = 25f;
+    public float YVelocity = 0;
+    public float TerminalVel = 22f;
+
     public int pickingRange = 5;
     public voxel selected;
     public int placeType = 1;
+    
     public boolean clicked = false;
     public long clickTime = 0;
+    
     public boolean grounded = false;
     public boolean jumped = false;
+    
     private Vector3f torso = Vector3f.ZERO_VECTOR;
     private Vector3f knees = Vector3f.ZERO_VECTOR;
 
@@ -34,7 +40,7 @@ public class Player extends Component {
         gameObject.getComponent(FPSCamera.class).input();
 
         if (Input.getKey(Input.KEY_SPACE) && grounded) {
-            velocity = currentGravity.normalized().mul(-1).mul(7.5f);
+            YVelocity = 7.5f;
             grounded = false;
             jumped = true;
         }
@@ -241,22 +247,22 @@ public class Player extends Component {
 
         //Up Down Movement
         if (ChunkManager.getBlockFromWorldPos(gameObject.getTransform().getPos().add(new Vector3f(0, 0.2f, 0))).getType() != 0) {
-            velocity.setY(0);
+            YVelocity = 0;
         }
         if (ChunkManager.getBlockFromWorldPos(gameObject.getTransform().getPos().sub(Vector3f.Y_AXIS.mul(height + 0.1f))).getType() == 0) {
-            velocity = velocity.add(currentGravity.mul((float)Time.getDelta()));
-            if (velocity.length() < GravityManager.TERMINAL_VEL) {
-                velocity = velocity.normalize().mul(GravityManager.TERMINAL_VEL);
+            YVelocity -= gravity * Time.getDelta();
+            if (YVelocity < -TerminalVel) {
+                YVelocity = -TerminalVel;
             }
-            move.setY((float) (velocity.getX() * Time.getDelta()));
+            move.setY((float) (YVelocity * Time.getDelta()));
             grounded = false;
         } else if (ChunkManager.getBlockFromWorldPos(gameObject.getTransform().getPos().sub(Vector3f.Y_AXIS.mul(height + 0.1f))).getType() != 0) {
             grounded = true;
             if (!jumped) {
-                velocity.setY(0);
+                YVelocity = 0;
             }
 
-            move.setY((float) (velocity.getX() * Time.getDelta()));
+            move.setY((float) (YVelocity * Time.getDelta()));
             jumped = false;
         }
 

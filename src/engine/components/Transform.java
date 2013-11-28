@@ -84,6 +84,10 @@ public class Transform extends Component
         up = Vector3f.UP.rotate(-x, Vector3f.X_AXIS).rotate(-y, Vector3f.Y_AXIS).rotate(-z, Vector3f.Z_AXIS);
         this.rot = new Vector3f(x, y, z);
     }
+    
+    public void rotate(float x, float y, float z){
+        rot.add(x, y, z);
+    }
 
     public Vector3f getScale() {
         return scale;
