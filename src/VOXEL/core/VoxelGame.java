@@ -12,7 +12,7 @@ public class VoxelGame {
 
     public static final int CHUNK_SIZE_XZ = 16;
     public static final int CHUNK_SIZE_Y = 16;
-    public static final int MAP_DIMENSION = 7;
+    public static final int MAP_DIMENSION = 4;
     public static final float VOXEL_SIZE = 1f;
     private Random rand = new Random();
     public static long seed = 4123674254L;
@@ -31,11 +31,11 @@ public class VoxelGame {
         player = new GameObject();
         player.setTag("Camera");
         player.AddComponent(new Camera(player));
-        player.AddComponent(new FreeFlyCamera(player));
-//        player.AddComponent(new FPSCamera(player));
-//        player.AddComponent(new Player(player));
+        //player.AddComponent(new FreeFlyCamera(player));
+        player.AddComponent(new FPSCamera(player));
+        player.AddComponent(new Player(player));
         player.getComponent(Camera.class).setPerspective(70, 0.01f, 1000f);
-        player.getTransform().setPos(32, 100f, 32f);
+        player.getTransform().setPos(32, (MAP_DIMENSION*CHUNK_SIZE_Y*VOXEL_SIZE)+5f, 32f);
         player.getTransform().setRotation(-45, 0, 0);
         Scene.addGameObject(player);
 

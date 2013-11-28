@@ -1,11 +1,10 @@
 package VOXEL.core;
 
 import engine.math.Vector3f;
-import java.util.ArrayList;
 
 public class ChunkManager 
 {
-    public static ArrayList<Chunk> chunks = new ArrayList<>();
+    public static Chunk[][][] chunks = new Chunk[VoxelGame.MAP_DIMENSION][VoxelGame.MAP_DIMENSION][VoxelGame.MAP_DIMENSION];
     
     private static final int VIEW_RANGE_CHUNKS = 8;
     
@@ -13,28 +12,38 @@ public class ChunkManager
         for(int x = 0; x < VoxelGame.MAP_DIMENSION; x++){
             for(int y = 0; y < VoxelGame.MAP_DIMENSION; y++){
                 for(int z = 0; z < VoxelGame.MAP_DIMENSION; z++){
-                    chunks.add(new Chunk(new Vector3f(x,y,z)));
+                    chunks[x][y][z] = new Chunk(new Vector3f(x,y,z));
                 }
             }
         }
         float time;
-        for(Chunk c : chunks){
-            time = System.nanoTime();
-            c.genChunk();
-            System.out.println("Chunk Load time: " + (System.nanoTime() - time) + "ns");
+        float loadTime = System.currentTimeMillis();
+        for(int x = 0; x < VoxelGame.MAP_DIMENSION; x++){
+            for(int y = 0; y < VoxelGame.MAP_DIMENSION; y++){
+                for(int z = 0; z < VoxelGame.MAP_DIMENSION; z++){
+                    time = System.nanoTime();
+                    chunks[x][y][z].genChunk();
+                    System.out.println("Chunk Load time: " + (System.nanoTime() - time) + "ns");
+                }
+            }
         }
-        for(Chunk c : chunks){
-            c.Generate();
+        for(int x = 0; x < VoxelGame.MAP_DIMENSION; x++){
+            for(int y = 0; y < VoxelGame.MAP_DIMENSION; y++){
+                for(int z = 0; z < VoxelGame.MAP_DIMENSION; z++){
+                    chunks[x][y][z].Generate();
+                }
+            }
         }
+        System.out.println("World Load time: " + (System.currentTimeMillis() - loadTime)/1000 + " secs");
     }
     
     public static Chunk getChunk(int x, int y, int z){
-        for(Chunk c : chunks){
-            if(c.chunkPos.getX() == x && c.chunkPos.getY() == y && c.chunkPos.getZ() == z){
-                return c;
-            }
-        }
-        return null;
+        if(x >= VoxelGame.MAP_DIMENSION || y >= VoxelGame.MAP_DIMENSION || z >= VoxelGame.MAP_DIMENSION || x < 0 || y < 0 || z < 0)
+            return null;
+        if(chunks[x][y][z] != null)
+            return chunks[x][y][z];
+        else
+            return null;
     }
     
     public static voxel getBlockFromWorldPos(float x, float y, float z){

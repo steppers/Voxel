@@ -42,7 +42,6 @@ public class Chunk extends GameObject {
     }
 
     public void Generate() {     
-        calcLight();
         genMesh();
 
         getComponent(MeshRenderer.class).setMaterial(material);
@@ -85,6 +84,7 @@ public class Chunk extends GameObject {
                 }
             }
         }
+        calcLight();
     }
 
     public void genMesh() {

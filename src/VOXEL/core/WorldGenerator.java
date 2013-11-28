@@ -108,27 +108,27 @@ public class WorldGenerator
     }
     
     private static float calcHills(int x, int y, int z, Vector3f chunkPos){
-        return (VoxelGame.perlin.PerlinNoise_2D(((chunkPos.getX() * VoxelGame.CHUNK_SIZE_XZ) + x) / 5.73f, ((chunkPos.getZ() * VoxelGame.CHUNK_SIZE_XZ) + z) / 5.73f) * 10) + (VoxelGame.MAP_DIMENSION*VoxelGame.CHUNK_SIZE_XZ)-14;
+        return (VoxelGame.perlin.PerlinNoise_2D(((chunkPos.getX() * VoxelGame.CHUNK_SIZE_XZ) + x) / 5.73f, ((chunkPos.getZ() * VoxelGame.CHUNK_SIZE_XZ) + z) / 5.73f) * 7) + (VoxelGame.MAP_DIMENSION*VoxelGame.CHUNK_SIZE_XZ)-14;
     }
     
     private static float calcHillsB(int x, int y, int z, Vector3f chunkPos){
-        return (VoxelGame.perlin.PerlinNoise_2D((((chunkPos.getX() * VoxelGame.CHUNK_SIZE_XZ) + x) / 5.73f)+VoxelGame.CHUNK_SIZE_XZ, (((chunkPos.getZ() * VoxelGame.CHUNK_SIZE_XZ) + z) / 5.73f)+VoxelGame.CHUNK_SIZE_XZ) * 10) + 14;
+        return (VoxelGame.perlin.PerlinNoise_2D((((chunkPos.getX() * VoxelGame.CHUNK_SIZE_XZ) + x) / 5.73f)+VoxelGame.CHUNK_SIZE_XZ, (((chunkPos.getZ() * VoxelGame.CHUNK_SIZE_XZ) + z) / 5.73f)+VoxelGame.CHUNK_SIZE_XZ) * 7) + 14;
     }
     
     private static float calcHillsL(int x, int y, int z, Vector3f chunkPos){
-        return (VoxelGame.perlin.PerlinNoise_2D(((chunkPos.getY() * VoxelGame.CHUNK_SIZE_Y) + y) / 5.73f, ((chunkPos.getZ() * VoxelGame.CHUNK_SIZE_XZ) + z) / 5.73f) * 10) + 14;
+        return (VoxelGame.perlin.PerlinNoise_2D(((chunkPos.getY() * VoxelGame.CHUNK_SIZE_Y) + y) / 5.73f, ((chunkPos.getZ() * VoxelGame.CHUNK_SIZE_XZ) + z) / 5.73f) * 7) + 14;
     }
     
     private static float calcHillsR(int x, int y, int z, Vector3f chunkPos){
-        return (VoxelGame.perlin.PerlinNoise_2D((((chunkPos.getY() * VoxelGame.CHUNK_SIZE_Y) + y) / 5.73f)+VoxelGame.CHUNK_SIZE_Y, (((chunkPos.getZ() * VoxelGame.CHUNK_SIZE_XZ) + z) / 5.73f)+VoxelGame.CHUNK_SIZE_XZ) * 10) + (VoxelGame.MAP_DIMENSION*VoxelGame.CHUNK_SIZE_XZ)-14;
+        return (VoxelGame.perlin.PerlinNoise_2D((((chunkPos.getY() * VoxelGame.CHUNK_SIZE_Y) + y) / 5.73f)+VoxelGame.CHUNK_SIZE_Y, (((chunkPos.getZ() * VoxelGame.CHUNK_SIZE_XZ) + z) / 5.73f)+VoxelGame.CHUNK_SIZE_XZ) * 7) + (VoxelGame.MAP_DIMENSION*VoxelGame.CHUNK_SIZE_XZ)-14;
     }
     
     private static float calcHillsF(int x, int y, int z, Vector3f chunkPos){
-        return (VoxelGame.perlin.PerlinNoise_2D(((chunkPos.getX() * VoxelGame.CHUNK_SIZE_XZ) + x) / 5.73f, ((chunkPos.getY() * VoxelGame.CHUNK_SIZE_Y) + y) / 5.73f) * 10) + 14;
+        return (VoxelGame.perlin.PerlinNoise_2D(((chunkPos.getX() * VoxelGame.CHUNK_SIZE_XZ) + x) / 5.73f, ((chunkPos.getY() * VoxelGame.CHUNK_SIZE_Y) + y) / 5.73f) * 7) + 14;
     }
     
     private static float calcHillsBa(int x, int y, int z, Vector3f chunkPos){
-        return (VoxelGame.perlin.PerlinNoise_2D((((chunkPos.getX() * VoxelGame.CHUNK_SIZE_XZ) + x) / 5.73f)+VoxelGame.CHUNK_SIZE_XZ, (((chunkPos.getY() * VoxelGame.CHUNK_SIZE_Y) + y) / 5.73f)+VoxelGame.CHUNK_SIZE_Y) * 10) + (VoxelGame.MAP_DIMENSION*VoxelGame.CHUNK_SIZE_XZ)-14;
+        return (VoxelGame.perlin.PerlinNoise_2D((((chunkPos.getX() * VoxelGame.CHUNK_SIZE_XZ) + x) / 5.73f)+VoxelGame.CHUNK_SIZE_XZ, (((chunkPos.getY() * VoxelGame.CHUNK_SIZE_Y) + y) / 5.73f)+VoxelGame.CHUNK_SIZE_Y) * 7) + (VoxelGame.MAP_DIMENSION*VoxelGame.CHUNK_SIZE_XZ)-14;
     }
     
     private static float calcMinerals(int x, int y, int z, Vector3f chunkPos){
