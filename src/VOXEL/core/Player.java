@@ -215,8 +215,6 @@ public class Player extends Component {
 
         Vector3f moveX = new Vector3f(move.getX(), 0, 0);
         Vector3f moveZ = new Vector3f(0, 0, move.getZ());
-        
-        //Rape
 
         if (move.getX() > 0) {
             moveX = moveX.add(Vector3f.X_AXIS.mul(width));
