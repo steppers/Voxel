@@ -38,7 +38,7 @@ public class WorldGenerator
     }
     
     private static float calcHills(int x, int y, int z, Vector3f chunkPos){
-        return (VoxelGame.perlin.PerlinNoise_2D(((chunkPos.getX() * VoxelGame.CHUNK_SIZE_XZ) + x) / 5.73f, ((chunkPos.getZ() * VoxelGame.CHUNK_SIZE_XZ) + z) / 5.73f) * 7) + (VoxelGame.Y_DIMENSION*VoxelGame.CHUNK_SIZE_Y)-25;
+        return (VoxelGame.perlin.PerlinNoise_2D(((chunkPos.getX() * VoxelGame.CHUNK_SIZE_XZ) + x) / 5.73f, ((chunkPos.getZ() * VoxelGame.CHUNK_SIZE_XZ) + z) / 5.73f) * 14) + (VoxelGame.Y_DIMENSION*VoxelGame.CHUNK_SIZE_Y)-30;
     }
     
     private static float calcMinerals(int x, int y, int z, Vector3f chunkPos){

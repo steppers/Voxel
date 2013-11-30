@@ -1,11 +1,11 @@
 package VOXEL.core;
 
 import Scripts.*;
-import engine.components.Camera;
-import engine.components.DirectionalLightComponent;
+import engine.components.*;
 import engine.core.Texture;
 import engine.ext.GameObject;
 import engine.ext.Scene;
+import engine.math.Vector3f;
 import java.util.Random;
 
 public class VoxelGame {
@@ -24,6 +24,7 @@ public class VoxelGame {
     public static Perlin perlin;
     GameObject player;
     GameObject sun;
+    VoxelSprite gun;
 
     public VoxelGame() {
         seed = (long) (Math.random() * 6787623f);
@@ -35,11 +36,10 @@ public class VoxelGame {
         player.setTag("Camera");
         player.AddComponent(new Camera(player));
         player.AddComponent(new FreeFlyCamera(player));
-//        player.AddComponent(new FPSCamera(player));
-//        player.AddComponent(new Player(player));
+        //player.AddComponent(new FPSCamera(player));
+        //player.AddComponent(new Player(player));
         player.getComponent(Camera.class).setPerspective(70, 0.01f, 1000f);
         player.getTransform().setPos(32, (CHUNK_SIZE_Y*VOXEL_SIZE)+5f, 32f);
-        player.getTransform().setRotation(-45, 0, 0);
         Scene.addGameObject(player);
 
         sun = new GameObject();
@@ -48,6 +48,15 @@ public class VoxelGame {
         sun.getTransform().setPos(0, 10, 0);
         sun.getTransform().setRotation(-78, 200, 0);
         Scene.addGameObject(sun);
+        
+        gun = new VoxelSprite(new Vector3f(-0.2f, -0.5f, 0.2f), 16, "test.spr");
+        Animator gunAnimator = new Animator(gun);
+        gunAnimator.addAnimation("bob", "test.anim");
+        gunAnimator.setLooping("bob", true);
+        gunAnimator.play("bob");
+        gun.AddComponent(gunAnimator);
+        player.addChild(gun);
+        Scene.addGameObject(gun);
 
         ChunkManager.init();
     }
@@ -58,7 +67,7 @@ public class VoxelGame {
 
     public void update() {
         Scene.update();
-        ChunkManager.update();
+        //ChunkManager.update();
     }
 
     public void render() {

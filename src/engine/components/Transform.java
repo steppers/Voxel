@@ -10,6 +10,10 @@ public class Transform extends Component
     private Vector3f rot;
     private Vector3f scale;
     
+    private Vector3f animPos = Vector3f.ZERO_VECTOR;
+    private Vector3f animRot = Vector3f.ZERO_VECTOR;
+    private Vector3f animScale = Vector3f.ONE_VECTOR;
+    
     public Vector3f forward = new Vector3f(0,0,1);
     public Vector3f up = new Vector3f(0,1,0);
     public Vector3f left = new Vector3f(-1,0,0);
@@ -25,10 +29,11 @@ public class Transform extends Component
     }
     
     public void calcTransformation(){
-        Matrix4f translationMatrix = new Matrix4f().initTranslation(pos.getX(), pos.getY(), pos.getZ());
-        Matrix4f rotationMatrix = new Matrix4f().initRotation(rot.getX(), rot.getY(), rot.getZ());
-        Matrix4f scaleMatrix = new Matrix4f().initScale(scale.getX(), scale.getY(), scale.getZ());
+        Matrix4f translationMatrix = new Matrix4f().initTranslation(pos.getX() + animPos.getX(), pos.getY() + animPos.getY(), pos.getZ() + animPos.getZ());
+        Matrix4f rotationMatrix = new Matrix4f().initRotation(-rot.getX() + animRot.getX(), rot.getY() + animRot.getY(), rot.getZ() + animRot.getZ());
+        Matrix4f scaleMatrix = new Matrix4f().initScale(scale.getX() * animScale.getX(), scale.getY() * animScale.getY(), scale.getZ() * animScale.getZ());
         transformationMatrix = translationMatrix.mul(rotationMatrix.mul(scaleMatrix));
+        resetAnimations();
         
         if(super.getGameObject().getParent() != null){
             super.getGameObject().getParent().getTransform().calcTransformation();
@@ -88,6 +93,12 @@ public class Transform extends Component
     public void rotate(float x, float y, float z){
         rot.add(x, y, z);
     }
+    
+    public void resetAnimations(){
+        animPos = Vector3f.ZERO_VECTOR;
+        animRot = Vector3f.ZERO_VECTOR;
+        animScale = Vector3f.ONE_VECTOR;
+    }
 
     public Vector3f getScale() {
         return scale;
@@ -99,5 +110,21 @@ public class Transform extends Component
 
     public void setScale(float x, float y, float z) {
         this.scale = new Vector3f(x, y, z);
+    }
+
+    public void setAnimPos(Vector3f animPos) {
+        this.animPos = this.animPos.add(animPos);
+    }
+    
+    public void setAnimPos(float x, float y, float z) {
+        this.animPos = this.animPos.add(new Vector3f(x,y,z));
+    }
+
+    public void setAnimRot(Vector3f animRot) {
+        this.animRot = this.animRot.add(animRot);
+    }
+
+    public void setAnimScale(Vector3f animScale) {
+        this.animScale = this.animScale.mul(animScale);
     }
 }
