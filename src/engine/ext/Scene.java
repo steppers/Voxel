@@ -34,6 +34,9 @@ public class Scene {
         for (GameObject g : gameObjects) {
             g.render();
         }
+        for (GameObject g : gameObjects) {
+            g.getTransform().resetAnimations();
+        }
     }
 
     public static GameObject FindGameObjectWithTag(String tag) {

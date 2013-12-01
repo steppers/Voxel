@@ -37,6 +37,15 @@ public class Animator extends Component
         }
     }
     
+    public void setSpeed(String name, float speed){
+        for(Animation a : animations){
+            if(a.getName().equals(name)){
+                a.setSpeed(speed);
+                break;
+            }
+        }
+    }
+    
     public void play(String name){
         for(Animation a : animations){
             if(a.getName().equals(name)){

@@ -24,7 +24,7 @@ public class VoxelGame {
     public static Perlin perlin;
     GameObject player;
     GameObject sun;
-    VoxelSprite gun;
+    Gun gun;
 
     public VoxelGame() {
         seed = (long) (Math.random() * 6787623f);
@@ -35,9 +35,9 @@ public class VoxelGame {
         player = new GameObject();
         player.setTag("Camera");
         player.AddComponent(new Camera(player));
-        player.AddComponent(new FreeFlyCamera(player));
-        //player.AddComponent(new FPSCamera(player));
-        //player.AddComponent(new Player(player));
+        //player.AddComponent(new FreeFlyCamera(player));
+        player.AddComponent(new FPSCamera(player));
+        player.AddComponent(new Player(player));
         player.getComponent(Camera.class).setPerspective(70, 0.01f, 1000f);
         player.getTransform().setPos(32, (CHUNK_SIZE_Y*VOXEL_SIZE)+5f, 32f);
         Scene.addGameObject(player);
@@ -49,12 +49,7 @@ public class VoxelGame {
         sun.getTransform().setRotation(-78, 200, 0);
         Scene.addGameObject(sun);
         
-        gun = new VoxelSprite(new Vector3f(-0.2f, -0.5f, 0.2f), 16, "test.spr");
-        Animator gunAnimator = new Animator(gun);
-        gunAnimator.addAnimation("bob", "test.anim");
-        gunAnimator.setLooping("bob", true);
-        gunAnimator.play("bob");
-        gun.AddComponent(gunAnimator);
+        gun = new Gun("test.spr");
         player.addChild(gun);
         Scene.addGameObject(gun);
 

@@ -12,7 +12,7 @@ public class MainComponent {
     public static final String TITLE = "Voxel Engine";
     
     //Frame Limit
-    public static final double FRAME_CAP = 500.0;
+    public static final double FRAME_CAP = 60.0;
     
     //true when the loop is iterating
     private boolean isRunning;

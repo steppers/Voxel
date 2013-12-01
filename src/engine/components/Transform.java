@@ -33,7 +33,6 @@ public class Transform extends Component
         Matrix4f rotationMatrix = new Matrix4f().initRotation(-rot.getX() + animRot.getX(), rot.getY() + animRot.getY(), rot.getZ() + animRot.getZ());
         Matrix4f scaleMatrix = new Matrix4f().initScale(scale.getX() * animScale.getX(), scale.getY() * animScale.getY(), scale.getZ() * animScale.getZ());
         transformationMatrix = translationMatrix.mul(rotationMatrix.mul(scaleMatrix));
-        resetAnimations();
         
         if(super.getGameObject().getParent() != null){
             super.getGameObject().getParent().getTransform().calcTransformation();

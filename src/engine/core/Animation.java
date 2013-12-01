@@ -14,6 +14,7 @@ public class Animation
     private String name;
     private float totalTime = 0;
     
+    private float speed = 1;
     public boolean paused = false;
     
     public Animation(String name, String fileName)
@@ -43,14 +44,12 @@ public class Animation
     }
     
     public AnimationFrame getFrame(){
-        totalTime += Time.getDelta()*1000;
-        float time = totalTime;
+        totalTime += Time.getDelta()*speed;
         if(isLooping()){
-            if(totalTime > getLength()){
-                totalTime = 0;
-                time = 0;
+            if(totalTime > length){
+                totalTime -= length;
             }
-        }else if(time > getLength()){
+        }else if(totalTime > length){
             return null;
         }
         
@@ -59,16 +58,16 @@ public class Animation
         AnimationFrame res = new AnimationFrame();
         
         for(AnimationFrame f : frames){
-            if(f.getTime() < time)
+            if(f.getTime() < totalTime)
                 low = f;
-            if(f.getTime() > time){
+            if(f.getTime() > totalTime){
                 high = f;
                 break;
             }
         }
         
         float timeDif = high.getTime() - low.getTime();
-        float lerpVar = (time - low.getTime())/timeDif;
+        float lerpVar = (totalTime - low.getTime())/timeDif;
         
         res.setPosition(VectorMath.lerp(lerpVar, low.getPosition(), high.getPosition()));
         res.setRotation(VectorMath.lerp(lerpVar, low.getRotation(), high.getRotation()));
@@ -98,5 +97,9 @@ public class Animation
 
     public void setTotalTime(float totalTime) {
         this.totalTime = totalTime;
+    }
+    
+    public void setSpeed(float speed){
+        this.speed = speed;
     }
 }
